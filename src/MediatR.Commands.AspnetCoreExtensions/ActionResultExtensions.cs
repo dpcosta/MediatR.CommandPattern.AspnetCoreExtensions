@@ -22,6 +22,11 @@ namespace MediatR.Commands.AspnetCoreExtensions
             if (result is Results.UnauthorizedResult) return new UnauthorizedObjectResult(result.Body);
             if (result is Results.ForbiddenResult) return new StatusCodeResult(403);
             if (result is InvalidInputResult) return new BadRequestObjectResult(result.Body);
+            if (result is ErrorResult)
+            {
+                var m = result.Body as MessageBody;
+                return new ObjectResult(new { ErrorMessage = m.Message }) { StatusCode = 500 };
+            }
             if (result is ExceptionResult)
             {
                 var e = result.Body as ExceptionBody;

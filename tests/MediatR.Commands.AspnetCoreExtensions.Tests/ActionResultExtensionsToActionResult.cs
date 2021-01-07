@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using MediatR.Commands.Results;
@@ -10,6 +11,7 @@ namespace MediatR.Commands.AspnetCoreExtensions.Tests
     {
         public static IEnumerable<object[]> ResultTypeInputAndExpectedActionResultType => new List<object[]>
         {
+            new object[] { new ErrorResult("Testes"), typeof(ObjectResult)},
             new object[] { new CreatedResult<string>("Testes"), typeof(OkObjectResult) },
             new object[] { new UpdatedResult<string>("Testes"), typeof(OkObjectResult) },
             new object[] { new DeletedResult<string>("Testes"), typeof(NoContentResult) },
@@ -27,7 +29,8 @@ namespace MediatR.Commands.AspnetCoreExtensions.Tests
             new object[] { new Results.NotFoundResult(), 404 },
             new object[] { new Results.UnauthorizedResult(), 401 },
             new object[] { new InvalidInputResult("Testes"), 400 },
-            new object[] { new ExceptionResult(new Exception("Testes")), 500 }
+            new object[] { new ExceptionResult(new Exception("Testes")), 500 },
+            new object[] { new ErrorResult("Testes"), 500 }
         };
 
         [Theory]
@@ -55,6 +58,23 @@ namespace MediatR.Commands.AspnetCoreExtensions.Tests
 
             // assert
             Assert.Equal(expectedStatusCode, statusCode);
+        }
+
+        [Fact]
+        public void ShouldReturnMessageTextOnErrorResult()
+        {
+            // arrange
+            string expectedMessage = "Testes";
+            IResult errorResult = new ErrorResult(expectedMessage);
+
+            // act
+            var result = errorResult.ToActionResult();
+
+            // assert
+            var obj = result.GetType().GetProperty("Value").GetValue(result);
+            Assert.Single(obj.GetType().GetProperties().Where(p => p.Name == "ErrorMessage"));
+            var message = (string)obj.GetType().GetProperty("ErrorMessage").GetValue(obj);
+            Assert.Equal(expectedMessage, message);
         }
     }
 }
