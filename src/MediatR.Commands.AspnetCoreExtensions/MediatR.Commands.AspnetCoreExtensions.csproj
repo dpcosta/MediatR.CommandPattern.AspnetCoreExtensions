@@ -5,8 +5,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Daniel Portugal</Authors>
     <Description>Extension method to convert IResult in IActionResult</Description>
-    <Version>1.0.3</Version>
-    <PackageReleaseNotes>Handling of new ForbiddenResult type.</PackageReleaseNotes>
+    <Version>1.0.4</Version>
+    <PackageReleaseNotes>ErrorResult now returns ObjectResult with StatusCode 500.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

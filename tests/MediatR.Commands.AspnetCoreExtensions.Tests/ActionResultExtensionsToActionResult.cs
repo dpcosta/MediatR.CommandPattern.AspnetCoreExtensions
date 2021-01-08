@@ -18,7 +18,7 @@ namespace MediatR.Commands.AspnetCoreExtensions.Tests
             new object[] { new Results.NotFoundResult(), typeof(Microsoft.AspNetCore.Mvc.NotFoundResult) },
             new object[] { new Results.UnauthorizedResult(), typeof(UnauthorizedObjectResult) },
             new object[] { new InvalidInputResult("Testes"), typeof(BadRequestObjectResult) },
-            new object[] { new ExceptionResult(new Exception("Testes")), typeof(OkObjectResult) }
+            new object[] { new ExceptionResult(new Exception("Testes")), typeof(ObjectResult) }
         };
 
         public static IEnumerable<object[]> ResultTypeInputAndExpectedStatusCode => new List<object[]>
